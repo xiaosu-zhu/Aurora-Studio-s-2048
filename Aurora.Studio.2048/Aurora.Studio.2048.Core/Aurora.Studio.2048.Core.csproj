@@ -112,7 +112,7 @@
     <EmbeddedResource Include="Properties\Aurora.Studio._2048.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Source\Repos\Aurora-Weather\com.aurora.auweather\com.aurora.shared\com.aurora.shared.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\Source\Repos\Aurora-Weather\com.aurora.auweather\com.aurora.shared\com.aurora.shared.csproj">
       <Project>{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}</Project>
       <Name>com.aurora.shared</Name>
     </ProjectReference>
