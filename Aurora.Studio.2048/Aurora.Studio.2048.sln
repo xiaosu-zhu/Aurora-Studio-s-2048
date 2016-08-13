@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurora.Studio.2048", "Auror
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurora.Studio.2048.Core", "Aurora.Studio.2048.Core\Aurora.Studio.2048.Core.csproj", "{E18CFFD9-407D-4C8F-B230-3CC9E38E3FC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.aurora.shared", "..\..\..\..\Source\Repos\Aurora-Weather\com.aurora.auweather\com.aurora.shared\com.aurora.shared.csproj", "{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{FB4E0542-4848-465E-8CFF-B4F7684C269A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.aurora.shared", "..\..\..\..\..\Source\Repos\Aurora-Weather\com.aurora.auweather\com.aurora.shared\com.aurora.shared.csproj", "{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,22 +59,6 @@ Global
 		{E18CFFD9-407D-4C8F-B230-3CC9E38E3FC5}.Release|x64.Build.0 = Release|x64
 		{E18CFFD9-407D-4C8F-B230-3CC9E38E3FC5}.Release|x86.ActiveCfg = Release|x86
 		{E18CFFD9-407D-4C8F-B230-3CC9E38E3FC5}.Release|x86.Build.0 = Release|x86
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|ARM.ActiveCfg = Debug|ARM
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|ARM.Build.0 = Debug|ARM
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|x64.ActiveCfg = Debug|x64
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|x64.Build.0 = Debug|x64
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|x86.ActiveCfg = Debug|x86
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|x86.Build.0 = Debug|x86
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|ARM.ActiveCfg = Release|ARM
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|ARM.Build.0 = Release|ARM
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|x64.ActiveCfg = Release|x64
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|x64.Build.0 = Release|x64
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|x86.ActiveCfg = Release|x86
-		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|x86.Build.0 = Release|x86
 		{FB4E0542-4848-465E-8CFF-B4F7684C269A}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{FB4E0542-4848-465E-8CFF-B4F7684C269A}.Debug|ARM.ActiveCfg = Debug|ARM
 		{FB4E0542-4848-465E-8CFF-B4F7684C269A}.Debug|ARM.Build.0 = Debug|ARM
@@ -95,6 +79,22 @@ Global
 		{FB4E0542-4848-465E-8CFF-B4F7684C269A}.Release|x86.ActiveCfg = Release|x86
 		{FB4E0542-4848-465E-8CFF-B4F7684C269A}.Release|x86.Build.0 = Release|x86
 		{FB4E0542-4848-465E-8CFF-B4F7684C269A}.Release|x86.Deploy.0 = Release|x86
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|ARM.ActiveCfg = Debug|ARM
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|ARM.Build.0 = Debug|ARM
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|x64.ActiveCfg = Debug|x64
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|x64.Build.0 = Debug|x64
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|x86.ActiveCfg = Debug|x86
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Debug|x86.Build.0 = Debug|x86
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|ARM.ActiveCfg = Release|ARM
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|ARM.Build.0 = Release|ARM
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|x64.ActiveCfg = Release|x64
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|x64.Build.0 = Release|x64
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|x86.ActiveCfg = Release|x86
+		{026D99CF-1C25-4DCF-AD95-1070BBA9F8A8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
