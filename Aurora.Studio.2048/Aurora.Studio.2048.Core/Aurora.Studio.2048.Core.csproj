@@ -107,7 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\Calculator.cs" />
+    <Compile Include="Game\Operator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Aurora.Studio._2048.Core.rd.xml" />
   </ItemGroup>

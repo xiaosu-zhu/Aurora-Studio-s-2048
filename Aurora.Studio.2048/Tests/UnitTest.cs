@@ -12,11 +12,11 @@ namespace Tests
         [TestMethod]
         public void MoveLeftTest()
         {
-            var p = Calculator.New();
-            Calculator.MoveLeft(ref p);
+            var p = Operator.New();
+            Operator.MoveLeft(ref p);
             p = new int[][] { new int[] { 2, 2, 2, 2 }, new int[] { 2, 4, 0, 0 }, new int[] { 2, 0, 2, 0 }, new int[] { 4, 4, 0, 2 } };
             var k = new int[][] { new int[] { 4, 4, 0, 0 }, new int[] { 2, 4, 0, 0 }, new int[] { 4, 0, 0, 0 }, new int[] { 8, 2, 0, 0 } };
-            Calculator.MoveLeft(ref p);
+            Operator.MoveLeft(ref p);
             Assert.AreEqual(k, p);
         }
     }

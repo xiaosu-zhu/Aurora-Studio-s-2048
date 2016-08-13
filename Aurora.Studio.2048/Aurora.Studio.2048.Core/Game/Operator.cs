@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using Com.Aurora.Shared.Extensions;
 using Com.Aurora.Shared.Helpers;
 
 namespace Aurora.Studio._2048.Core.Game
 {
-    public static class Calculator
+    public static class Operator
     {
         public static int[][] New()
         {
