@@ -7,7 +7,41 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Grid Background="#faf8ef">
+        <Viewbox Margin="24" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <Grid Height="500" Width="500">
+                <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Height="500" Width="500" Fill="#bbada0" RadiusX="6" RadiusY="6" />
+                <Grid Height="485" Width="485" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Rectangle Fill="#59EEE4DA" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="1" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="1" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="1" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+            </Grid>
+        </Viewbox>
     </Grid>
 </Page>
