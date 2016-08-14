@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game\Operator.cs" />
+    <Compile Include="Game\Tile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Aurora.Studio._2048.Core.rd.xml" />
   </ItemGroup>
