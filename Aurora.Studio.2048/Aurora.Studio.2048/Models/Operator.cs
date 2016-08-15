@@ -49,7 +49,7 @@ namespace Aurora.Studio._2048.Models
                 default:
                     break;
             }
-
+            Core.Game.Operator.Refresh(ref grid);
         }
 
         private void FindTile()
@@ -92,7 +92,11 @@ namespace Aurora.Studio._2048.Models
                 {
                     if (tile.Data == 0)
                     {
-
+                        var p = row.ToList().Find(x =>
+                        {
+                            return x.YOld == tile.YOld + 1;
+                        });
+                        tile.MergeRight(p.Row, p.Col);
                     }
                 }
             }

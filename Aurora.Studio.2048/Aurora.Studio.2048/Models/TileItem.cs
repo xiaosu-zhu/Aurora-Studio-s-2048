@@ -18,8 +18,8 @@ namespace Aurora.Studio._2048.Models
         public uint Data { get; set; }
         public SolidColorBrush Color { get; set; }
 
-        public int XOffset { get; set; }
-        public int YOffset { get; set; }
+        public int XOld { get; set; }
+        public int YOld { get; set; }
 
         public int Col { get; set; }
         public int Row { get; set; }
@@ -116,6 +116,18 @@ namespace Aurora.Studio._2048.Models
             Pop.Children.Add(p4);
         }
 
+        internal void MergeRight(int x, int y)
+        {
+            Rect.SetValue(Canvas.ZIndexProperty, 0);
+            (Ani.Children[2] as ColorAnimation).From = (Rect.Fill as SolidColorBrush).Color;
+            (Ani.Children[2] as ColorAnimation).To = (Rect.Fill as SolidColorBrush).Color;
+            (Ani.Children[0] as DoubleAnimation).From = tran.TranslateX;
+            (Ani.Children[1] as DoubleAnimation).From = tran.TranslateY;
+            var point = GridData.GetTransform(x, y);
+            (Ani.Children[0] as DoubleAnimation).To = point.X;
+            (Ani.Children[1] as DoubleAnimation).To = point.Y;
+        }
+
         public void Update(uint data, int X, int Y)
         {
             if (data != Data)
@@ -125,6 +137,8 @@ namespace Aurora.Studio._2048.Models
             Data = data;
             Color = new SolidColorBrush(Palette.GetColor(data));
             var point = GridData.GetTransform(X, Y);
+            XOld = Row;
+            YOld = Col;
             Row = Y;
             Col = X;
             (Ani.Children[0] as DoubleAnimation).From = tran.TranslateX;

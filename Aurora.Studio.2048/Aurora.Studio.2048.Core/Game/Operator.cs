@@ -62,6 +62,18 @@ namespace Aurora.Studio._2048.Core.Game
             return new int[] { row[num], col[num] };
         }
 
+        public static void Refresh(ref Tile[][] grid)
+        {
+            for (int i = 0; i < grid.Length; i++)
+            {
+                for (int j = 0; j < grid[i].Length; j++)
+                {
+                    grid[i][j].Row = i;
+                    grid[i][j].Col = j;
+                }
+            }
+        }
+
         public static string Print(Tile[][] matrix)
         {
             var sb = new StringBuilder();
