@@ -7,15 +7,20 @@ namespace Aurora.Studio._2048.Core.Game
 {
     public static class Operator
     {
-        public static Tile[][] New()
+        public static int[] New(out Tile[][] mat)
         {
-            var p = new Tile[][] { new Tile[] { new Tile { Data = 0, Row = 0, Col = 0 }, new Tile { Data = 0, Row = 0, Col = 1 }, new Tile { Data = 0, Row = 0, Col = 2 }, new Tile { Data = 0, Row = 0, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 1, Col = 0 }, new Tile { Data = 0, Row = 1, Col = 1 }, new Tile { Data = 0, Row = 1, Col = 2 }, new Tile { Data = 0, Row = 1, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 2, Col = 0 }, new Tile { Data = 0, Row = 2, Col = 1 }, new Tile { Data = 0, Row = 2, Col = 2 }, new Tile { Data = 0, Row = 2, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 3, Col = 0 }, new Tile { Data = 0, Row = 3, Col = 1 }, new Tile { Data = 0, Row = 3, Col = 2 }, new Tile { Data = 0, Row = 3, Col = 3 } } };
-            Add(ref p);
-            Add(ref p);
-            return p;
+            mat = new Tile[][] { new Tile[] { new Tile { Data = 0, Row = 0, Col = 0 }, new Tile { Data = 0, Row = 0, Col = 1 }, new Tile { Data = 0, Row = 0, Col = 2 }, new Tile { Data = 0, Row = 0, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 1, Col = 0 }, new Tile { Data = 0, Row = 1, Col = 1 }, new Tile { Data = 0, Row = 1, Col = 2 }, new Tile { Data = 0, Row = 1, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 2, Col = 0 }, new Tile { Data = 0, Row = 2, Col = 1 }, new Tile { Data = 0, Row = 2, Col = 2 }, new Tile { Data = 0, Row = 2, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 3, Col = 0 }, new Tile { Data = 0, Row = 3, Col = 1 }, new Tile { Data = 0, Row = 3, Col = 2 }, new Tile { Data = 0, Row = 3, Col = 3 } } };
+            var i = new int[] { 0, 0, 0, 0 };
+            var k = Add(ref mat);
+            i[0] = k[0];
+            i[1] = k[1];
+            k = Add(ref mat);
+            i[2] = k[0];
+            i[3] = k[1];
+            return i;
         }
 
-        public static void Add(ref Tile[][] matrix)
+        public static int[] Add(ref Tile[][] matrix)
         {
             int i = 0, j = 0;
             List<int> row = new List<int>();
@@ -48,8 +53,13 @@ namespace Aurora.Studio._2048.Core.Game
             {
                 throw new ArgumentException("Not a valid matrix");
             }
+            if (row.Count == 0)
+            {
+                return null;
+            }
             var num = Tools.Random.Next(row.Count);
             matrix[row[num]][col[num]] = Tools.RandomBool() ? new Tile { Data = 2, Row = row[num], Col = col[num] } : new Tile { Data = 4, Row = row[num], Col = col[num] };
+            return new int[] { row[num], col[num] };
         }
 
         public static string Print(Tile[][] matrix)
@@ -82,13 +92,15 @@ namespace Aurora.Studio._2048.Core.Game
                     {
                         if (row[i].Data == 0)
                         {
+                            var p = row[i];
                             row[i] = row[j];
-                            row[j].Data = 0;
+                            row[j] = row[i];
                         }
                         else if (j != i + 1)
                         {
+                            var p = row[i + 1];
                             row[i + 1] = row[j];
-                            row[j].Data = 0;
+                            row[j] = row[i + 1];
                         }
                     }
                     else
@@ -136,13 +148,15 @@ namespace Aurora.Studio._2048.Core.Game
                     {
                         if (row[i].Data == 0)
                         {
+                            var p = row[i];
                             row[i] = row[j];
-                            row[j].Data = 0;
+                            row[j] = p;
                         }
                         else if (j != i - 1)
                         {
+                            var p = row[i - 1];
                             row[i - 1] = row[j];
-                            row[j].Data = 0;
+                            row[j] = row[i - 1];
                         }
                     }
                     else
@@ -190,13 +204,15 @@ namespace Aurora.Studio._2048.Core.Game
                     {
                         if (matrix[i][k].Data == 0)
                         {
+                            var p = matrix[i][k];
                             matrix[i][k] = matrix[j][k];
-                            matrix[j][k].Data = 0;
+                            matrix[j][k] = matrix[i][k];
                         }
                         else if (j != i - 1)
                         {
+                            var p = matrix[i - 1][k];
                             matrix[i - 1][k] = matrix[j][k];
-                            matrix[j][k].Data = 0;
+                            matrix[j][k] = matrix[i - 1][k];
                         }
                     }
                     else
@@ -244,13 +260,15 @@ namespace Aurora.Studio._2048.Core.Game
                     {
                         if (matrix[i][k].Data == 0)
                         {
+                            var p = matrix[i][k];
                             matrix[i][k] = matrix[j][k];
-                            matrix[j][k].Data = 0;
+                            matrix[j][k] = matrix[i][k];
                         }
                         else if (j != i + 1)
                         {
+                            var p = matrix[i + 1][k];
                             matrix[i + 1][k] = matrix[j][k];
-                            matrix[j][k].Data = 0;
+                            matrix[j][k] = matrix[i + 1][k];
                         }
                     }
                     else

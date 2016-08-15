@@ -95,12 +95,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GridData.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Enums.cs" />
     <Compile Include="Models\Operator.cs" />
-    <Compile Include="Models\Tile.cs" />
+    <Compile Include="Models\TileItem.cs" />
     <Compile Include="Palette.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

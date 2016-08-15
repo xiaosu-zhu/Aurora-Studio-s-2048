@@ -14,6 +14,13 @@ namespace Aurora.Studio._2048.Models
 
         public List<TileItem> Tiles = new List<TileItem>();
 
+        public Operator()
+        {
+            var m = Core.Game.Operator.New(out grid);
+            Tiles.Add(new TileItem(grid[m[0]][m[1]].Data, m[0], m[1]));
+            Tiles.Add(new TileItem(grid[m[2]][m[3]].Data, m[2], m[3]));
+        }
+
         public void Update(Direction direction)
         {
             Core.Game.Operator.Copy(grid, out temp);
@@ -21,19 +28,23 @@ namespace Aurora.Studio._2048.Models
             {
                 case Direction.Up:
                     Core.Game.Operator.MoveUp(ref grid);
-                    CheckUp();
+                    FindTile();
+                    MergeUp();
                     break;
                 case Direction.Down:
                     Core.Game.Operator.MoveDown(ref grid);
-                    CheckDown();
+                    FindTile();
+                    MergeDown();
                     break;
                 case Direction.Left:
                     Core.Game.Operator.MoveLeft(ref grid);
-                    CheckLeft();
+                    FindTile();
+                    MergeLeft();
                     break;
                 case Direction.Right:
                     Core.Game.Operator.MoveRight(ref grid);
-                    CheckRight();
+                    FindTile();
+                    MergeRight();
                     break;
                 default:
                     break;
@@ -41,39 +52,63 @@ namespace Aurora.Studio._2048.Models
 
         }
 
-        private void CheckRight()
+        private void FindTile()
         {
             int i = 0, j = 0;
-            foreach (var row in grid)
+            var find = false;
+            foreach (var item in Tiles)
             {
-                foreach (var item in row)
+                foreach (var row in grid)
                 {
-                    if (item.Data != 0)
+                    foreach (var tile in row)
                     {
-                        var p = Tiles.Find(x =>
+                        j++;
+                        if (tile.Row == item.Row && tile.Col == item.Col)
                         {
-                            return x.Row == item.Row && x.Col == item.Col;
-                        });
-                        p.Update(item.data, i, j);
+                            item.Update(tile.Data, i, j - 1);
+                            find = true;
+                            break;
+                        }
                     }
+                    if (find)
+                        break;
                     i++;
+                    j = 0;
                 }
                 i = 0;
-                j++;
+                j = 0;
+                find = false;
             }
         }
 
-        private void CheckLeft()
+        private void MergeRight()
+        {
+            var m = from g in Tiles
+                    group g by g.Row into p
+                    select p;
+            foreach (var row in m)
+            {
+                foreach (var tile in row)
+                {
+                    if (tile.Data == 0)
+                    {
+
+                    }
+                }
+            }
+        }
+
+        private void MergeLeft()
         {
             throw new NotImplementedException();
         }
 
-        private void CheckDown()
+        private void MergeDown()
         {
             throw new NotImplementedException();
         }
 
-        private void CheckUp()
+        private void MergeUp()
         {
             throw new NotImplementedException();
         }
