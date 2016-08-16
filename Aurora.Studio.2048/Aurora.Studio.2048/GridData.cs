@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Foundation;
+﻿using Windows.Foundation;
 
 namespace Aurora.Studio._2048
 {
@@ -14,6 +9,11 @@ namespace Aurora.Studio._2048
         public static Point GetTransform(int X, int Y)
         {
             return new Point(trans[Y], trans[X]);
+        }
+
+        public static double GetSize(int length)
+        {
+            return 70 - (length - 1) * 15;
         }
     }
 }

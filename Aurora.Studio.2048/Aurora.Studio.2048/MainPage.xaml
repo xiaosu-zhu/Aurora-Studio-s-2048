@@ -5,13 +5,145 @@
     xmlns:local="using:Aurora.Studio._2048"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="Page_Loaded"
+    Unloaded="Page_Unloaded"
+    PointerPressed="Page_PointerEntered"
+    PointerReleased="Page_PointerReleased"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button" x:Key="BaseButton">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
+                <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+                <Setter Property="UseSystemFocusVisuals" Value="True" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="RootGrid">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal">
+                                            <Storyboard>
+                                                <PointerUpThemeAnimation Storyboard.TargetName="RootGrid" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <PointerUpThemeAnimation Storyboard.TargetName="RootGrid" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <PointerDownThemeAnimation Storyboard.TargetName="RootGrid" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Rectangle Height="48" Fill="#776e65" HorizontalAlignment="Stretch" VerticalAlignment="Center" RadiusX="6" RadiusY="6" />
+                                <ContentPresenter x:Name="ContentPresenter"
+                          Content="{TemplateBinding Content}"
+                          ContentTransitions="{TemplateBinding ContentTransitions}"
+                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                                  Padding="12,0,12,0"
+                                                  FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" Foreground="#f9f6f2"
+                          AutomationProperties.AccessibilityView="Raw"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
     <Grid Background="#faf8ef">
-        <Viewbox Margin="24" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <Grid.Resources>
+            <Storyboard x:Name="EndAni">
+                <DoubleAnimation Storyboard.TargetName="OverRect" Storyboard.TargetProperty="Opacity" From="0" To="0.6" EnableDependentAnimation="True">
+                    <DoubleAnimation.EasingFunction>
+                        <QuinticEase />
+                    </DoubleAnimation.EasingFunction>
+                </DoubleAnimation>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="OverMask" Storyboard.TargetProperty="Visibility" >
+                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Name="StartAni" Completed="StartAni_Completed">
+                <DoubleAnimation Storyboard.TargetName="OverRect" Storyboard.TargetProperty="Opacity" From="0.6" To="0" EnableDependentAnimation="True">
+                    <DoubleAnimation.EasingFunction>
+                        <QuinticEase />
+                    </DoubleAnimation.EasingFunction>
+                </DoubleAnimation>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="OverMask" Storyboard.TargetProperty="Visibility" >
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0.64" Value="Collapsed" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="5*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="2048" FontSize="64" Margin="12" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Score" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock x:Name="Score" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Best" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock x:Name="Best" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Margin="12,0,12,0" x:Name="EndlessText" Text="Endless" Opacity="0" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Button Style="{ThemeResource BaseButton}" Content="New Game" Click="Button_Click" />
+        </StackPanel>
+        <Viewbox Grid.Row="2" MaxHeight="1000" MaxWidth="1000" Margin="24" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <Grid Height="500" Width="500">
                 <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Height="500" Width="500" Fill="#bbada0" RadiusX="6" RadiusY="6" />
                 <Grid Height="485" Width="485" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="6*" />
+                        <RowDefinition Height="115*"/>
+                        <RowDefinition Height="121*" />
+                        <RowDefinition Height="121*" />
+                        <RowDefinition Height="121*" />
+                    </Grid.RowDefinitions>
+                    <Rectangle Fill="#59EEE4DA" RadiusX="3" RadiusY="3" Margin="8,1.778,7.333,7.333" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.667,1.778,7.667,7.333" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.333,1.778,7.667,7.333" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.333,1.778,8,7.333" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" RadiusX="3" RadiusY="3" Margin="8,7.667,7.333,7.666" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" RadiusX="3" RadiusY="3" Margin="8,7.334,7.333,7.666" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="4" RadiusX="3" RadiusY="3" Margin="8,7.334,7.333,8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.667,7.667,7.667,7.666" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.333,7.667,7.667,7.666" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.333,7.667,8,7.666" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.667,7.334,7.667,7.666" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.333,7.334,7.667,7.666" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.333,7.334,8,7.666" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="4" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.667,7.334,7.667,8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="4" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.333,7.334,7.667,8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="#59EEE4DA" Grid.Row="4" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.333,7.334,8,8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+                <Grid x:Name="Ground" Height="485" Width="485" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -24,24 +156,50 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Rectangle Fill="#59EEE4DA" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="1" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="1" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="1" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+                <Grid Visibility="Collapsed" x:Name="OverMask" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Rectangle x:Name="OverRect" HorizontalAlignment="Center" VerticalAlignment="Center" Height="500" Width="500" Fill="#bbada0" RadiusX="6" RadiusY="6" />
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="EndText" Text="Game Over!" Foreground="#f9f6f2" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" FontSize="85" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Button x:Name="EndButton" Click="EndButton_Click" Style="{ThemeResource BaseButton}" Content="Continue" />
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Viewbox>
+        <Button Content="About" Foreground="#776e65" Style="{ThemeResource TextBlockButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4" Grid.Row="2" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" >
+            <Button.Flyout>
+                <Flyout>
+                    <StackPanel>
+                        <TextBlock FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
+                            <Run Text="Build 1.0.1608" />
+                        </TextBlock>
+                        <TextBlock FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
+                            <Run Text="Aurora Studio©2016" />
+                        </TextBlock>
+                        <TextBlock FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
+                            <Run Text="Try Other Apps!" />
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Button FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" Style="{ThemeResource TextBlockButtonStyle}" Margin="12" Click="Button_Click_1">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <Grid Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+                                        <Image Height="50" Width="50" Source="/Assets/Weather.png" />
+                                    </Grid>
+                                    <TextBlock Text="Weather" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                            <Button FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" Style="{ThemeResource TextBlockButtonStyle}" Margin="12" Click="Button_Click_1">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <Grid Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+                                        <Image Height="50" Width="50" Source="/Assets/Music.png" />
+                                    </Grid>
+                                    <TextBlock Text="Music" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Flyout>
+            </Button.Flyout>
+        </Button>
     </Grid>
 </Page>

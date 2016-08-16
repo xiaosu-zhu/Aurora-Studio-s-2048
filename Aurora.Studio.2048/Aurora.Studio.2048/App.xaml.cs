@@ -1,7 +1,8 @@
 ﻿using System;
-using Aurora.Studio._2048.Models;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -30,14 +31,6 @@ namespace Aurora.Studio._2048
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = true;
-                var op = new Operator();
-                op.Update(Direction.Right);
-            }
-#endif
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -57,6 +50,11 @@ namespace Aurora.Studio._2048
                 // 将框架放在当前窗口中
                 Window.Current.Content = rootFrame;
             }
+            var view = ApplicationView.GetForCurrentView();
+            view.TitleBar.ButtonInactiveBackgroundColor = Color.FromArgb(255, 0xea, 0xe8, 0xdf);
+            view.TitleBar.InactiveBackgroundColor = Color.FromArgb(255, 0xea, 0xe8, 0xdf);
+            view.TitleBar.BackgroundColor = Color.FromArgb(255, 0xfa, 0xf8, 0xef);
+            view.TitleBar.ButtonBackgroundColor = Color.FromArgb(255, 0xfa, 0xf8, 0xef);
 
             if (e.PrelaunchActivated == false)
             {

@@ -29,5 +29,6 @@ namespace Aurora.Studio._2048
                 default: return colors[11];
             }
         }
+
     }
 }

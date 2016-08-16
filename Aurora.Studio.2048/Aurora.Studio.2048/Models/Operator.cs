@@ -1,120 +1,469 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.Studio._2048.Core.Game;
+using Com.Aurora.Shared.Helpers;
+using Windows.Foundation;
+using Windows.System;
+using Windows.UI.Input;
+using Windows.UI.Xaml.Controls;
 
 namespace Aurora.Studio._2048.Models
 {
     class Operator
     {
-        private Tile[][] grid;
-        private Tile[][] temp;
+        public event EventHandler GameOverEvent;
+        public event EventHandler ScoreAdd;
+        public event EventHandler GameEndEvent;
 
         public List<TileItem> Tiles = new List<TileItem>();
 
-        public Operator()
+        public uint Score { get; set; } = 0;
+
+        public Operator(uint[] data, uint score)
         {
-            var m = Core.Game.Operator.New(out grid);
-            Tiles.Add(new TileItem(grid[m[0]][m[1]].Data, m[0], m[1]));
-            Tiles.Add(new TileItem(grid[m[2]][m[3]].Data, m[2], m[3]));
+            int i = 0;
+            Score = score;
+            foreach (var item in data)
+            {
+                if (item != 0u)
+                {
+                    Tiles.Add(new TileItem(item, i / 4, i % 4));
+                }
+                i++;
+            }
+            if (Tiles.Count == 0)
+            {
+                Tiles.Clear();
+                var a = Tools.Random.Next(4);
+                var b = Tools.Random.Next(4);
+                Tiles.Add(new TileItem(Tools.RandomBool() ? 2u : 4u, a, b));
+                int c, d;
+                do
+                {
+                    c = Tools.Random.Next(4);
+                    d = Tools.Random.Next(4);
+                } while (c == a && d == b);
+                Tiles.Add(new TileItem(Tools.RandomBool() ? 2u : 4u, c, d));
+            }
         }
 
-        public void Update(Direction direction)
+        internal void Place(Grid ground)
         {
-            Core.Game.Operator.Copy(grid, out temp);
+            ground.Children.Clear();
+            foreach (var item in Tiles)
+            {
+                ground.Children.Add(item.Rect);
+                item.Pop.Begin();
+            }
+        }
+
+        internal bool IsNewGame()
+        {
+            return Tiles.Count == 2;
+        }
+
+        public bool Update(Direction direction)
+        {
             switch (direction)
             {
                 case Direction.Up:
-                    Core.Game.Operator.MoveUp(ref grid);
-                    FindTile();
-                    MergeUp();
-                    break;
+                    return MoveUp();
                 case Direction.Down:
-                    Core.Game.Operator.MoveDown(ref grid);
-                    FindTile();
-                    MergeDown();
-                    break;
+                    return MoveDown();
                 case Direction.Left:
-                    Core.Game.Operator.MoveLeft(ref grid);
-                    FindTile();
-                    MergeLeft();
-                    break;
+                    return MoveLeft();
                 case Direction.Right:
-                    Core.Game.Operator.MoveRight(ref grid);
-                    FindTile();
-                    MergeRight();
-                    break;
-                default:
-                    break;
+                    return MoveRight();
+                default: return false;
             }
-            Core.Game.Operator.Refresh(ref grid);
         }
 
-        private void FindTile()
+        internal void Clear(Grid ground)
         {
-            int i = 0, j = 0;
-            var find = false;
+            ground.Children.Clear();
+        }
+
+        internal static Direction? GetDirection(VirtualKey virtualKey)
+        {
+            if (virtualKey == VirtualKey.Up || virtualKey == VirtualKey.W)
+            {
+                return Direction.Up;
+            }
+            if (virtualKey == VirtualKey.Down || virtualKey == VirtualKey.S)
+            {
+                return Direction.Down;
+            }
+            if (virtualKey == VirtualKey.Left || virtualKey == VirtualKey.A)
+            {
+                return Direction.Left;
+            }
+            if (virtualKey == VirtualKey.Right || virtualKey == VirtualKey.D)
+            {
+                return Direction.Right;
+            }
+            return null;
+        }
+
+        internal void Play(Grid ground, bool p)
+        {
+            ground.Children.Clear();
             foreach (var item in Tiles)
             {
-                foreach (var row in grid)
+                ground.Children.Add(item.Rect);
+                item.Ani.Begin();
+                if (item.IsMerged)
                 {
-                    foreach (var tile in row)
+                    item.Pop.Begin();
+                }
+            }
+            Refresh(ground, p);
+        }
+
+        private void Refresh(Grid ground, bool b)
+        {
+            for (int i = Tiles.Count - 1; i > -1; i--)
+            {
+                if (Tiles[i].Data == 0)
+                {
+                    Tiles.Remove(Tiles[i]);
+                    continue;
+                }
+                if (Tiles[i].Data == 2048)
+                {
+                    OnGameEnd();
+                }
+                Tiles[i].Refresh();
+            }
+            if (Tiles.Count == 16)
+            {
+                var p = new Tile[][] { new Tile[] { new Tile { Data = 0, Row = 0, Col = 0 }, new Tile { Data = 0, Row = 0, Col = 1 }, new Tile { Data = 0, Row = 0, Col = 2 }, new Tile { Data = 0, Row = 0, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 1, Col = 0 }, new Tile { Data = 0, Row = 1, Col = 1 }, new Tile { Data = 0, Row = 1, Col = 2 }, new Tile { Data = 0, Row = 1, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 2, Col = 0 }, new Tile { Data = 0, Row = 2, Col = 1 }, new Tile { Data = 0, Row = 2, Col = 2 }, new Tile { Data = 0, Row = 2, Col = 3 } }, new Tile[] { new Tile { Data = 0, Row = 3, Col = 0 }, new Tile { Data = 0, Row = 3, Col = 1 }, new Tile { Data = 0, Row = 3, Col = 2 }, new Tile { Data = 0, Row = 3, Col = 3 } } };
+                foreach (var item in Tiles)
+                {
+                    p[item.Row][item.Col].Data = item.Data;
+                }
+                if (GridHelper.MoveDown(p) || GridHelper.MoveLeft(p) || GridHelper.MoveRight(p) || GridHelper.MoveUp(p))
+                {
+
+                }
+                else
+                {
+                    OnGameOver();
+                }
+            }
+            if (b)
+            {
+                if (Tiles.Count < 16)
+                {
+                    int p;
+                    do
                     {
-                        j++;
-                        if (tile.Row == item.Row && tile.Col == item.Col)
+                        p = Tools.Random.Next(16);
+                    } while (Tiles.Exists(x =>
+                    {
+                        return x.Row * 4 + x.Col == p;
+                    }));
+                    var til = new TileItem(Tools.RandomBool() ? 2u : 4u, p / 4, p % 4);
+                    Tiles.Add(til);
+                    ground.Children.Add(til.Rect);
+                    til.Pop.Begin();
+                }
+
+            }
+        }
+
+        internal Direction? GetDirection(Point In, Point Out)
+        {
+            var x = Out.X - In.X;
+            var y = Out.Y - In.Y;
+            if (Math.Abs(x) > 15 || Math.Abs(y) > 15)
+            {
+                var angle = (float)Math.Atan2(y, x);
+                angle = Tools.RadiansToDegrees(angle);
+                if (angle < 30 && angle > -30)
+                {
+                    return Direction.Right;
+                }
+                else if (angle > -120 && angle < -60)
+                {
+                    return Direction.Up;
+                }
+                else if (angle < -150 || angle > 150)
+                {
+                    return Direction.Left;
+                }
+                else if (angle > 60 && angle < 120)
+                {
+                    return Direction.Down;
+                }
+            }
+            return null;
+        }
+
+        private void OnGameEnd()
+        {
+            GameEndEvent?.Invoke(this, new EventArgs());
+        }
+
+        private void OnGameOver()
+        {
+            GameOverEvent?.Invoke(this, new EventArgs());
+        }
+
+        private bool MoveRight()
+        {
+            var g = from p in Tiles
+                    group p by p.Row into m
+                    select m;
+            bool b = false;
+            foreach (var item in g)
+            {
+                var k = from l in item
+                        orderby l.Col descending
+                        select l;
+
+                var n = k.ToList();
+
+                for (int i = 0; i < n.Count - 1; i++)
+                {
+                    if (n[i].Data == n[i + 1].Data && !n[i].IsMerged && !n[i].IsDisappeared)
+                    {
+                        n[i].Disappear();
+                        n[i + 1].Merge();
+                    }
+                }
+                var j = 3;
+                foreach (var tile in n)
+                {
+                    if (tile.IsDisappeared)
+                    {
+                        b = true;
+                        continue;
+                    }
+                    if (tile.Col != j)
+                        b = true;
+                    tile.Col = j;
+                    j--;
+                }
+                if (b)
+                {
+                    for (j = n.Count - 1; j > -1; j--)
+                    {
+                        if (n[j].IsDisappeared)
                         {
-                            item.Update(tile.Data, i, j - 1);
-                            find = true;
-                            break;
+                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col);
+                        }
+                        else if (n[j].IsMerged)
+                        {
+                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
+                            Score += n[j].Data;
+                            OnScoreAdd();
+                            if (n[j].Data == 1024)
+                            {
+                                OnGameEnd();
+                            }
+                        }
+                        else
+                        {
+                            n[j].Update(n[j].Data, n[j].Row, n[j].Col);
                         }
                     }
-                    if (find)
-                        break;
-                    i++;
-                    j = 0;
                 }
-                i = 0;
-                j = 0;
-                find = false;
             }
+            return b;
         }
 
-        private void MergeRight()
+        private bool MoveLeft()
         {
-            var m = from g in Tiles
-                    group g by g.Row into p
-                    select p;
-            foreach (var row in m)
+            var g = from p in Tiles
+                    group p by p.Row into m
+                    select m;
+            bool b = false;
+            foreach (var item in g)
             {
-                foreach (var tile in row)
+                var k = from l in item
+                        orderby l.Col ascending
+                        select l;
+
+                var n = k.ToList();
+
+                for (int i = 0; i < n.Count - 1; i++)
                 {
-                    if (tile.Data == 0)
+                    if (n[i].Data == n[i + 1].Data && !n[i].IsMerged && !n[i].IsDisappeared)
                     {
-                        var p = row.ToList().Find(x =>
+                        n[i].Disappear();
+                        n[i + 1].Merge();
+                    }
+                }
+                var j = 0;
+                foreach (var tile in n)
+                {
+                    if (tile.IsDisappeared)
+                    {
+                        b = true;
+                        continue;
+                    }
+                    if (tile.Col != j)
+                        b = true;
+                    tile.Col = j;
+                    j++;
+                }
+                if (b)
+                {
+                    for (j = n.Count - 1; j > -1; j--)
+                    {
+                        if (n[j].IsDisappeared)
                         {
-                            return x.YOld == tile.YOld + 1;
-                        });
-                        tile.MergeRight(p.Row, p.Col);
+                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col);
+                        }
+                        else if (n[j].IsMerged)
+                        {
+                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
+                            Score += n[j].Data;
+                            OnScoreAdd();
+                            if (n[j].Data == 1024)
+                            {
+                                OnGameEnd();
+                            }
+                        }
+                        else
+                        {
+                            n[j].Update(n[j].Data, n[j].Row, n[j].Col);
+                        }
                     }
                 }
             }
+            return b;
         }
 
-        private void MergeLeft()
+        private bool MoveDown()
         {
-            throw new NotImplementedException();
+            var g = from p in Tiles
+                    group p by p.Col into m
+                    select m;
+            bool b = false;
+            foreach (var item in g)
+            {
+                var k = from l in item
+                        orderby l.Row descending
+                        select l;
+
+                var n = k.ToList();
+
+                for (int i = 0; i < n.Count - 1; i++)
+                {
+                    if (n[i].Data == n[i + 1].Data && !n[i].IsMerged && !n[i].IsDisappeared)
+                    {
+                        n[i].Disappear();
+                        n[i + 1].Merge();
+                    }
+                }
+                var j = 3;
+                foreach (var tile in n)
+                {
+                    if (tile.IsDisappeared)
+                    {
+                        b = true;
+                        continue;
+                    }
+                    if (tile.Row != j)
+                        b = true;
+                    tile.Row = j;
+                    j--;
+                }
+                if (b)
+                {
+                    for (j = n.Count - 1; j > -1; j--)
+                    {
+                        if (n[j].IsDisappeared)
+                        {
+                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col);
+                        }
+                        else if (n[j].IsMerged)
+                        {
+                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
+                            Score += n[j].Data;
+                            OnScoreAdd();
+                            if (n[j].Data == 1024)
+                            {
+                                OnGameEnd();
+                            }
+                        }
+                        else
+                        {
+                            n[j].Update(n[j].Data, n[j].Row, n[j].Col);
+                        }
+                    }
+                }
+            }
+            return b;
         }
 
-        private void MergeDown()
+        private bool MoveUp()
         {
-            throw new NotImplementedException();
+            var g = from p in Tiles
+                    group p by p.Col into m
+                    select m;
+            bool b = false;
+            foreach (var item in g)
+            {
+                var k = from l in item
+                        orderby l.Row ascending
+                        select l;
+
+                var n = k.ToList();
+
+                for (int i = 0; i < n.Count - 1; i++)
+                {
+                    if (n[i].Data == n[i + 1].Data && !n[i].IsMerged && !n[i].IsDisappeared)
+                    {
+                        n[i].Disappear();
+                        n[i + 1].Merge();
+                    }
+                }
+                var j = 0;
+                foreach (var tile in n)
+                {
+                    if (tile.IsDisappeared)
+                    {
+                        b = true;
+                        continue;
+                    }
+                    if (tile.Row != j)
+                        b = true;
+                    tile.Row = j;
+                    j++;
+                }
+                if (b)
+                {
+                    for (j = n.Count - 1; j > -1; j--)
+                    {
+                        if (n[j].IsDisappeared)
+                        {
+                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col);
+                        }
+                        else if (n[j].IsMerged)
+                        {
+                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
+                            Score += n[j].Data;
+                            OnScoreAdd();
+                            if (n[j].Data == 1024)
+                            {
+                                OnGameEnd();
+                            }
+                        }
+                        else
+                        {
+                            n[j].Update(n[j].Data, n[j].Row, n[j].Col);
+                        }
+                    }
+                }
+            }
+            return b;
         }
 
-        private void MergeUp()
+        private void OnScoreAdd()
         {
-            throw new NotImplementedException();
+            ScoreAdd?.Invoke(this, new EventArgs());
         }
     }
 }
