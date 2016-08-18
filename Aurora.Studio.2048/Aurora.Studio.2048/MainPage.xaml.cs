@@ -67,6 +67,9 @@ namespace Aurora.Studio._2048
         private void Continue()
         {
             s.IgnoreGameEnd = true;
+            EndlessText.Opacity = 1;
+            isGameEnd = false;
+            isGamePaused = false;
             StartAni.Begin();
             Save();
         }
@@ -74,7 +77,19 @@ namespace Aurora.Studio._2048
         private void Restart()
         {
             op.Clear(Ground);
+            isGameEnd = false;
+            isGamePaused = false;
+            EndlessText.Opacity = 0;
+            if (op != null)
+            {
+                op.GameEndEvent -= Op_GameEndEvent;
+                op.GameOverEvent -= Op_GameOverEvent;
+                op.ScoreAdd -= Op_ScoreAdd;
+            }
             op = new Operator(new uint[] { }, 0);
+            op.GameEndEvent += Op_GameEndEvent;
+            op.GameOverEvent += Op_GameOverEvent;
+            op.ScoreAdd += Op_ScoreAdd;
             StartAni.Begin();
             s.IgnoreGameEnd = false;
             Save();
@@ -102,13 +117,21 @@ namespace Aurora.Studio._2048
         {
             Score.Text = s.Score.ToString();
             Best.Text = s.HighScore.ToString();
+            if (op != null)
+            {
+                op.GameEndEvent -= Op_GameEndEvent;
+                op.GameOverEvent -= Op_GameOverEvent;
+                op.ScoreAdd -= Op_ScoreAdd;
+            }
             op = new Operator(s.Data, s.Score);
+            op.GameEndEvent += Op_GameEndEvent;
+            op.GameOverEvent += Op_GameOverEvent;
+            op.ScoreAdd += Op_ScoreAdd;
             if (s.IsDarkMode)
             {
 
             }
-            op.GameOverEvent += Op_GameOverEvent;
-            op.ScoreAdd += Op_ScoreAdd;
+
             if (!s.IgnoreGameEnd && op.IsNewGame())
             {
                 op.GameEndEvent += Op_GameEndEvent;
@@ -134,18 +157,22 @@ namespace Aurora.Studio._2048
 
         private void Op_GameEndEvent(object sender, System.EventArgs e)
         {
+            EndButton.Click -= Button_Click;
             EndText.Text = "You Win!";
             EndButton.Content = "Continue";
             isGameEnd = true;
             Save();
+            EndButton.Click += EndButton_Click;
             EndAni.Begin();
         }
 
         private void Op_GameOverEvent(object sender, System.EventArgs e)
         {
+            EndButton.Click -= EndButton_Click;
             EndText.Text = "Game Over!";
             EndButton.Content = "Restart";
             isGamePaused = true;
+            EndButton.Click += Button_Click;
             EndAni.Begin();
         }
 

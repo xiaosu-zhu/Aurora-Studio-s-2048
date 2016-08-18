@@ -44,6 +44,7 @@ namespace Aurora.Studio._2048.Models
                     d = Tools.Random.Next(4);
                 } while (c == a && d == b);
                 Tiles.Add(new TileItem(Tools.RandomBool() ? 2u : 4u, c, d));
+                Score = 0;
             }
         }
 
@@ -257,10 +258,6 @@ namespace Aurora.Studio._2048.Models
                             n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
                             Score += n[j].Data;
                             OnScoreAdd();
-                            if (n[j].Data == 1024)
-                            {
-                                OnGameEnd();
-                            }
                         }
                         else
                         {
@@ -320,10 +317,6 @@ namespace Aurora.Studio._2048.Models
                             n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
                             Score += n[j].Data;
                             OnScoreAdd();
-                            if (n[j].Data == 1024)
-                            {
-                                OnGameEnd();
-                            }
                         }
                         else
                         {
@@ -383,10 +376,6 @@ namespace Aurora.Studio._2048.Models
                             n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
                             Score += n[j].Data;
                             OnScoreAdd();
-                            if (n[j].Data == 1024)
-                            {
-                                OnGameEnd();
-                            }
                         }
                         else
                         {
@@ -446,10 +435,6 @@ namespace Aurora.Studio._2048.Models
                             n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
                             Score += n[j].Data;
                             OnScoreAdd();
-                            if (n[j].Data == 1024)
-                            {
-                                OnGameEnd();
-                            }
                         }
                         else
                         {
