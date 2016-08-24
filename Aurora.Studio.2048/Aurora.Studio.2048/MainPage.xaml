@@ -13,6 +13,10 @@
 
     <Page.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary Source="./Styles/LightThemeDictionary.xaml" x:Key="Light" />
+                <ResourceDictionary Source="./Styles/DarkThemeDictionary.xaml" x:Key="Dark" />
+            </ResourceDictionary.ThemeDictionaries>
             <Style TargetType="Button" x:Key="BaseButton">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
@@ -48,7 +52,7 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <Rectangle Height="48" Fill="#776e65" HorizontalAlignment="Stretch" VerticalAlignment="Center" RadiusX="6" RadiusY="6" />
+                                <Rectangle Height="48" Fill="{ThemeResource ButtonBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Center" RadiusX="6" RadiusY="6" />
                                 <ContentPresenter x:Name="ContentPresenter"
                           Content="{TemplateBinding Content}"
                           ContentTransitions="{TemplateBinding ContentTransitions}"
@@ -56,7 +60,7 @@
                                                   HorizontalAlignment="Center" VerticalAlignment="Center"
                                                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                                   Padding="12,0,12,0"
-                                                  FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" Foreground="#f9f6f2"
+                                                  FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" Foreground="{ThemeResource ForegroundWhiteBrush}"
                           AutomationProperties.AccessibilityView="Raw"/>
                             </Grid>
                         </ControlTemplate>
@@ -66,7 +70,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="#faf8ef">
+    <Grid Background="{ThemeResource BackgroundBrush}">
         <Grid.Resources>
             <Storyboard x:Name="EndAni">
                 <DoubleAnimation Storyboard.TargetName="OverRect" Storyboard.TargetProperty="Opacity" From="0" To="0.6" EnableDependentAnimation="True">
@@ -95,23 +99,24 @@
             <RowDefinition Height="5*" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="2048" FontSize="64" Margin="12" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <TextBlock Text="2048" FontSize="64" Margin="12" Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Left" VerticalAlignment="Center" />
             <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Score" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <TextBlock x:Name="Score" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Text="Score" FontSize="18" Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock x:Name="Score" FontSize="18" Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Margin="8" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Best" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <TextBlock x:Name="Best" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock Text="Best" FontSize="18" Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextBlock x:Name="Best" FontSize="18" Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Margin="12,0,12,0" x:Name="EndlessText" Text="Endless Mode" Opacity="0" FontSize="18" Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <Button Style="{ThemeResource BaseButton}" Content="New Game" Click="Button_Click" />
+            <TextBlock Margin="8,0,8,0" x:Name="EndlessText" Text="Endless Mode" Opacity="0" FontSize="18" Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Button Margin="8,0,8,0" Style="{ThemeResource BaseButton}" Content="New Game" Click="Button_Click" />
+            <Button x:Name="ThemeButton" Margin="8,0,8,0" Style="{ThemeResource BaseButton}" Content="Light" Click="Button_Click_3" />
         </StackPanel>
         <Viewbox Grid.Row="2" MaxHeight="1000" MaxWidth="1000" Margin="24" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <Grid Height="500" Width="500">
-                <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Height="500" Width="500" Fill="#bbada0" RadiusX="6" RadiusY="6" />
+                <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Height="500" Width="500" Fill="{ThemeResource GridBGBrush}" RadiusX="6" RadiusY="6" />
                 <Grid Height="485" Width="485" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -126,22 +131,22 @@
                         <RowDefinition Height="121*" />
                         <RowDefinition Height="121*" />
                     </Grid.RowDefinitions>
-                    <Rectangle Fill="#59EEE4DA" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="4" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="2" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="3" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="4" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="4" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Rectangle Fill="#59EEE4DA" Grid.Row="4" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="4" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="2" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="2" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="2" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="3" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="3" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="3" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="4" Grid.Column="1" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="4" Grid.Column="2" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Rectangle Fill="{ThemeResource GridBrush}" Grid.Row="4" Grid.Column="3" RadiusX="3" RadiusY="3" Margin="7.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
                 <Grid x:Name="Ground" Height="485" Width="485" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Grid.ColumnDefinitions>
@@ -158,25 +163,25 @@
                     </Grid.RowDefinitions>
                 </Grid>
                 <Grid Visibility="Collapsed" x:Name="OverMask" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Rectangle x:Name="OverRect" HorizontalAlignment="Center" VerticalAlignment="Center" Height="500" Width="500" Fill="#bbada0" RadiusX="6" RadiusY="6" />
+                    <Rectangle x:Name="OverRect" HorizontalAlignment="Center" VerticalAlignment="Center" Height="500" Width="500" Fill="{ThemeResource GridBGBrush}" RadiusX="6" RadiusY="6" />
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock x:Name="EndText" Text="Game Over!" Foreground="#f9f6f2" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" FontSize="85" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBlock x:Name="EndText" Text="Game Over!" Foreground="{ThemeResource ForegroundWhiteBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" FontSize="85" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         <Button x:Name="EndButton" Click="EndButton_Click" Style="{ThemeResource BaseButton}" Content="Continue" />
                     </StackPanel>
                 </Grid>
             </Grid>
         </Viewbox>
-        <Button Content="About" Foreground="#776e65" Style="{ThemeResource TextBlockButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4" Grid.Row="2" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" >
+        <Button Content="About" Foreground="{ThemeResource ForegroundBrush}" Style="{ThemeResource TextBlockButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="4" Grid.Row="2" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" >
             <Button.Flyout>
                 <Flyout>
                     <StackPanel>
-                        <TextBlock Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
-                            <Run Text="Build 1.0.16082" />
+                        <TextBlock Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
+                            <Run Text="Build 1.0.16084" />
                         </TextBlock>
-                        <TextBlock Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
-                            <Run Text="Aurora Studio©2016" />
+                        <TextBlock Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
+                            <Run Text="Aurora Studio © 2016" />
                         </TextBlock>
-                        <TextBlock Foreground="#776e65" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
+                        <TextBlock Foreground="{ThemeResource ForegroundBrush}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" >
                             <Run Text="Try Other Apps!" />
                         </TextBlock>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -197,6 +202,32 @@
                                 </StackPanel>
                             </Button>
                         </StackPanel>
+                    </StackPanel>
+                </Flyout>
+            </Button.Flyout>
+        </Button>
+        <Button Content="Github" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" Foreground="{ThemeResource ForegroundBrush}" Style="{ThemeResource TextBlockButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="4" Grid.Row="2" >
+            <Button.Flyout>
+                <Flyout>
+                    <StackPanel Margin="12">
+                        <Button Style="{ThemeResource TextBlockButtonStyle}" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" Content="Go to Github" Click="Button_Click_2"/>
+                        <TextBlock PointerReleased="TextBlock_PointerReleased" MaxWidth="320" FontFamily="/Assets/ClearSans-Bold.ttf#Clear Sans" TextWrapping="WrapWholeWords" Style="{ThemeResource BodyTextBlockStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="                   Aurora Studio's 2048&#x000A;&#x000A;The MIT License&#x000A;&#x000A;Copyright(C) 2016 Aurora Studio&#x000A;&#x000A; 
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), 
+to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.&#x000A;
+  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.&#x000A;----------------------------------------------------&#x000A;
+                       Com.Aurora.Shared&#x000A;&#x000A;The MIT License&#x000A;&#x000A;Copyright(C) 2016 Aurora Studio&#x000A;&#x000A; 
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), 
+to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.&#x000A;
+  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.&#x000A;">
+                        </TextBlock>
                     </StackPanel>
                 </Flyout>
             </Button.Flyout>

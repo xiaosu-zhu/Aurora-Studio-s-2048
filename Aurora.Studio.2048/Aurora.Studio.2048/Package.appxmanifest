@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="6727Aurora-ZXS.AuroraStudios2048" Publisher="CN=C726CFE3-60F0-4B5C-8D98-3381263565AE" Version="1.0.16082.0" />
+  <Identity Name="6727Aurora-ZXS.AuroraStudios2048" Publisher="CN=C726CFE3-60F0-4B5C-8D98-3381263565AE" Version="1.0.16083.0" />
   <mp:PhoneIdentity PhoneProductId="cf7c1e85-0814-47fc-b63d-7321c302506b" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Aurora Studio's 2048</DisplayName>

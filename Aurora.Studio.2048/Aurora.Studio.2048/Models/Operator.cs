@@ -4,7 +4,7 @@ using System.Linq;
 using Com.Aurora.Shared.Helpers;
 using Windows.Foundation;
 using Windows.System;
-using Windows.UI.Input;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Aurora.Studio._2048.Models
@@ -19,7 +19,7 @@ namespace Aurora.Studio._2048.Models
 
         public uint Score { get; set; } = 0;
 
-        public Operator(uint[] data, uint score)
+        public Operator(uint[] data, uint score, ElementTheme theme)
         {
             int i = 0;
             Score = score;
@@ -27,7 +27,7 @@ namespace Aurora.Studio._2048.Models
             {
                 if (item != 0u)
                 {
-                    Tiles.Add(new TileItem(item, i / 4, i % 4));
+                    Tiles.Add(new TileItem(item, i / 4, i % 4, theme));
                 }
                 i++;
             }
@@ -36,14 +36,14 @@ namespace Aurora.Studio._2048.Models
                 Tiles.Clear();
                 var a = Tools.Random.Next(4);
                 var b = Tools.Random.Next(4);
-                Tiles.Add(new TileItem(Tools.RandomBool() ? 2u : 4u, a, b));
+                Tiles.Add(new TileItem(Tools.RandomBool(91) ? 2u : 4u, a, b, theme));
                 int c, d;
                 do
                 {
                     c = Tools.Random.Next(4);
                     d = Tools.Random.Next(4);
                 } while (c == a && d == b);
-                Tiles.Add(new TileItem(Tools.RandomBool() ? 2u : 4u, c, d));
+                Tiles.Add(new TileItem(Tools.RandomBool(91) ? 2u : 4u, c, d, theme));
                 Score = 0;
             }
         }
@@ -63,18 +63,18 @@ namespace Aurora.Studio._2048.Models
             return Tiles.Count == 2;
         }
 
-        public bool Update(Direction direction)
+        public bool Update(Direction direction, ElementTheme theme)
         {
             switch (direction)
             {
                 case Direction.Up:
-                    return MoveUp();
+                    return MoveUp(theme);
                 case Direction.Down:
-                    return MoveDown();
+                    return MoveDown(theme);
                 case Direction.Left:
-                    return MoveLeft();
+                    return MoveLeft(theme);
                 case Direction.Right:
-                    return MoveRight();
+                    return MoveRight(theme);
                 default: return false;
             }
         }
@@ -105,7 +105,7 @@ namespace Aurora.Studio._2048.Models
             return null;
         }
 
-        internal void Play(Grid ground, bool p)
+        internal void Play(Grid ground, bool p, ElementTheme theme)
         {
             ground.Children.Clear();
             foreach (var item in Tiles)
@@ -117,10 +117,10 @@ namespace Aurora.Studio._2048.Models
                     item.Pop.Begin();
                 }
             }
-            Refresh(ground, p);
+            Refresh(ground, p, theme);
         }
 
-        private void Refresh(Grid ground, bool b)
+        private void Refresh(Grid ground, bool b, ElementTheme theme)
         {
             for (int i = Tiles.Count - 1; i > -1; i--)
             {
@@ -163,7 +163,7 @@ namespace Aurora.Studio._2048.Models
                     {
                         return x.Row * 4 + x.Col == p;
                     }));
-                    var til = new TileItem(Tools.RandomBool() ? 2u : 4u, p / 4, p % 4);
+                    var til = new TileItem(Tools.RandomBool(91) ? 2u : 4u, p / 4, p % 4, theme);
                     Tiles.Add(til);
                     ground.Children.Add(til.Rect);
                     til.Pop.Begin();
@@ -210,7 +210,7 @@ namespace Aurora.Studio._2048.Models
             GameOverEvent?.Invoke(this, new EventArgs());
         }
 
-        private bool MoveRight()
+        private bool MoveRight(ElementTheme theme)
         {
             var g = from p in Tiles
                     group p by p.Row into m
@@ -251,17 +251,17 @@ namespace Aurora.Studio._2048.Models
                     {
                         if (n[j].IsDisappeared)
                         {
-                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col);
+                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col, theme);
                         }
                         else if (n[j].IsMerged)
                         {
-                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
+                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col, theme);
                             Score += n[j].Data;
                             OnScoreAdd();
                         }
                         else
                         {
-                            n[j].Update(n[j].Data, n[j].Row, n[j].Col);
+                            n[j].Update(n[j].Data, n[j].Row, n[j].Col, theme);
                         }
                     }
                 }
@@ -269,7 +269,15 @@ namespace Aurora.Studio._2048.Models
             return b;
         }
 
-        private bool MoveLeft()
+        internal void ChangeTheme(ElementTheme dark)
+        {
+            foreach (var item in Tiles)
+            {
+                item.ChangeTheme(dark);
+            }
+        }
+
+        private bool MoveLeft(ElementTheme theme)
         {
             var g = from p in Tiles
                     group p by p.Row into m
@@ -310,17 +318,17 @@ namespace Aurora.Studio._2048.Models
                     {
                         if (n[j].IsDisappeared)
                         {
-                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col);
+                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col, theme);
                         }
                         else if (n[j].IsMerged)
                         {
-                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
+                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col, theme);
                             Score += n[j].Data;
                             OnScoreAdd();
                         }
                         else
                         {
-                            n[j].Update(n[j].Data, n[j].Row, n[j].Col);
+                            n[j].Update(n[j].Data, n[j].Row, n[j].Col, theme);
                         }
                     }
                 }
@@ -328,7 +336,7 @@ namespace Aurora.Studio._2048.Models
             return b;
         }
 
-        private bool MoveDown()
+        private bool MoveDown(ElementTheme theme)
         {
             var g = from p in Tiles
                     group p by p.Col into m
@@ -369,17 +377,17 @@ namespace Aurora.Studio._2048.Models
                     {
                         if (n[j].IsDisappeared)
                         {
-                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col);
+                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col, theme);
                         }
                         else if (n[j].IsMerged)
                         {
-                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
+                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col, theme);
                             Score += n[j].Data;
                             OnScoreAdd();
                         }
                         else
                         {
-                            n[j].Update(n[j].Data, n[j].Row, n[j].Col);
+                            n[j].Update(n[j].Data, n[j].Row, n[j].Col, theme);
                         }
                     }
                 }
@@ -387,7 +395,7 @@ namespace Aurora.Studio._2048.Models
             return b;
         }
 
-        private bool MoveUp()
+        private bool MoveUp(ElementTheme theme)
         {
             var g = from p in Tiles
                     group p by p.Col into m
@@ -428,17 +436,17 @@ namespace Aurora.Studio._2048.Models
                     {
                         if (n[j].IsDisappeared)
                         {
-                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col);
+                            n[j].Update(0, n[j + 1].Row, n[j + 1].Col, theme);
                         }
                         else if (n[j].IsMerged)
                         {
-                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col);
+                            n[j].Update(n[j].Data * 2, n[j].Row, n[j].Col, theme);
                             Score += n[j].Data;
                             OnScoreAdd();
                         }
                         else
                         {
-                            n[j].Update(n[j].Data, n[j].Row, n[j].Col);
+                            n[j].Update(n[j].Data, n[j].Row, n[j].Col, theme);
                         }
                     }
                 }

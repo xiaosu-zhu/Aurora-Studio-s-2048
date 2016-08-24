@@ -17,7 +17,6 @@ namespace Aurora.Studio._2048.Models
         private static readonly Color white = Color.FromArgb(255, 0xf9, 0xf6, 0xf2);
 
         public uint Data { get; set; }
-        public SolidColorBrush BG { get; set; }
 
         public int XOld { get; set; }
         public int YOld { get; set; }
@@ -54,14 +53,14 @@ namespace Aurora.Studio._2048.Models
         private CompositeTransform tran = new CompositeTransform();
 
 
-        public TileItem(uint data, int x, int y)
+        public TileItem(uint data, int x, int y, ElementTheme theme)
         {
             Data = data;
             Row = x;
             Col = y;
             XOld = Row;
             YOld = Col;
-            tang.Fill = new SolidColorBrush(Palette.GetColor(data));
+            tang.Fill = new SolidColorBrush(Palette.GetColor(data, theme));
             Rect.SetValue(Canvas.ZIndexProperty, 1);
             var point = GridData.GetTransform(x, y);
             tran.TranslateX = point.X;
@@ -74,9 +73,13 @@ namespace Aurora.Studio._2048.Models
             text.FontSize = GridData.GetSize(text.Text.Length);
             Rect.Children.Add(tang);
             Rect.Children.Add(text);
-            if (data > 5)
+            if (Data > 5)
             {
                 (text.Foreground as SolidColorBrush).Color = white;
+            }
+            else
+            {
+                (text.Foreground as SolidColorBrush).Color = black;
             }
 
             var p1 = new DoubleAnimation
@@ -209,14 +212,14 @@ namespace Aurora.Studio._2048.Models
             IsDisappeared = true;
         }
 
-        public void Update(uint data, int X, int Y)
+        public void Update(uint data, int X, int Y, ElementTheme theme)
         {
             if (data != Data)
             {
                 (Pop.Children[0] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 1;
                 (Pop.Children[1] as DoubleAnimationUsingKeyFrames).KeyFrames[0].Value = 1;
                 (Pop.Children[2] as ColorAnimation).From = (tang.Fill as SolidColorBrush).Color;
-                (Pop.Children[2] as ColorAnimation).To = Palette.GetColor(data);
+                (Pop.Children[2] as ColorAnimation).To = Palette.GetColor(data, theme);
             }
 
             if (data == 0)
@@ -231,6 +234,10 @@ namespace Aurora.Studio._2048.Models
                 {
                     (text.Foreground as SolidColorBrush).Color = white;
                 }
+                else
+                {
+                    (text.Foreground as SolidColorBrush).Color = black;
+                }
             }
             Data = data;
             var point = GridData.GetTransform(X, Y);
@@ -242,6 +249,19 @@ namespace Aurora.Studio._2048.Models
             (Ani.Children[1] as DoubleAnimation).From = tran.TranslateY;
             (Ani.Children[0] as DoubleAnimation).To = point.X;
             (Ani.Children[1] as DoubleAnimation).To = point.Y;
+        }
+
+        internal void ChangeTheme(ElementTheme dark)
+        {
+            (tang.Fill as SolidColorBrush).Color = Palette.GetColor(Data, dark);
+            if (Data > 5)
+            {
+                (text.Foreground as SolidColorBrush).Color = white;
+            }
+            else
+            {
+                (text.Foreground as SolidColorBrush).Color = black;
+            }
         }
     }
 }

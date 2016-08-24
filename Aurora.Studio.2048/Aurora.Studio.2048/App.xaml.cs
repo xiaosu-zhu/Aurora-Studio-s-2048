@@ -55,7 +55,7 @@ namespace Aurora.Studio._2048
             view.TitleBar.InactiveBackgroundColor = Color.FromArgb(255, 0xea, 0xe8, 0xdf);
             view.TitleBar.BackgroundColor = Color.FromArgb(255, 0xfa, 0xf8, 0xef);
             view.TitleBar.ButtonBackgroundColor = Color.FromArgb(255, 0xfa, 0xf8, 0xef);
-
+            view.TitleBar.ForegroundColor = Color.FromArgb(0xff, 0x06, 0x09, 0x0d);
             if (e.PrelaunchActivated == false)
             {
                 if (rootFrame.Content == null)
@@ -92,6 +92,33 @@ namespace Aurora.Studio._2048
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
+        }
+
+        internal static void ChangeStatusBar(ElementTheme dark)
+        {
+            var view = ApplicationView.GetForCurrentView();
+            switch (dark)
+            {
+                case ElementTheme.Default:
+                case ElementTheme.Light:
+
+                    view.TitleBar.ButtonInactiveBackgroundColor = Color.FromArgb(255, 0xea, 0xe8, 0xdf);
+                    view.TitleBar.InactiveBackgroundColor = Color.FromArgb(255, 0xea, 0xe8, 0xdf);
+                    view.TitleBar.BackgroundColor = Color.FromArgb(255, 0xfa, 0xf8, 0xef);
+                    view.TitleBar.ButtonBackgroundColor = Color.FromArgb(255, 0xfa, 0xf8, 0xef);
+                    view.TitleBar.ForegroundColor = Color.FromArgb(0xff, 0x06, 0x09, 0x0d);
+                    break;
+                case ElementTheme.Dark:
+                    view.TitleBar.ButtonInactiveBackgroundColor = Color.FromArgb(255, 0x15, 0x17, 0x20);
+                    view.TitleBar.InactiveBackgroundColor = Color.FromArgb(255, 0x15, 0x17, 0x20);
+                    view.TitleBar.BackgroundColor = Color.FromArgb(255, 0x05, 0x07, 0x10);
+                    view.TitleBar.ButtonBackgroundColor = Color.FromArgb(255, 0x05, 0x07, 0x10);
+                    view.TitleBar.ForegroundColor = Color.FromArgb(0xff, 0xf9, 0xf6, 0xf2);
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Aurora.Studio._2048.Models;
 using Windows.Foundation;
 using Windows.System.Threading;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -12,7 +15,7 @@ namespace Aurora.Studio._2048
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, INotifyPropertyChanged
     {
         private Operator op;
         private Settings s = Settings.Get();
@@ -60,8 +63,8 @@ namespace Aurora.Studio._2048
         {
             if (direction == null)
                 return;
-            var p = op.Update((Direction)direction);
-            op.Play(Ground, p);
+            var p = op.Update((Direction)direction, RequestedTheme);
+            op.Play(Ground, p, RequestedTheme);
         }
 
         private void Continue()
@@ -86,7 +89,7 @@ namespace Aurora.Studio._2048
                 op.GameOverEvent -= Op_GameOverEvent;
                 op.ScoreAdd -= Op_ScoreAdd;
             }
-            op = new Operator(new uint[] { }, 0);
+            op = new Operator(new uint[] { }, 0, RequestedTheme);
             op.GameEndEvent += Op_GameEndEvent;
             op.GameOverEvent += Op_GameOverEvent;
             op.ScoreAdd += Op_ScoreAdd;
@@ -123,15 +126,28 @@ namespace Aurora.Studio._2048
                 op.GameOverEvent -= Op_GameOverEvent;
                 op.ScoreAdd -= Op_ScoreAdd;
             }
-            op = new Operator(s.Data, s.Score);
+            op = new Operator(s.Data, s.Score, RequestedTheme);
             op.GameEndEvent += Op_GameEndEvent;
             op.GameOverEvent += Op_GameOverEvent;
             op.ScoreAdd += Op_ScoreAdd;
             if (s.IsDarkMode)
             {
-
+                ThemeButton.Content = "Dark";
+                s.IsDarkMode = true;
+                s.Save();
+                RequestedTheme = ElementTheme.Dark;
+                op.ChangeTheme(ElementTheme.Dark);
+                App.ChangeStatusBar(ElementTheme.Dark);
             }
-
+            else
+            {
+                ThemeButton.Content = "Light";
+                s.IsDarkMode = false;
+                s.Save();
+                RequestedTheme = ElementTheme.Light;
+                op.ChangeTheme(ElementTheme.Light);
+                App.ChangeStatusBar(ElementTheme.Light);
+            }
             if (!s.IgnoreGameEnd && op.IsNewGame())
             {
                 op.GameEndEvent += Op_GameEndEvent;
@@ -208,6 +224,65 @@ namespace Aurora.Studio._2048
             var p = e.GetCurrentPoint(this).Position;
             var d = op.GetDirection(point, p);
             Execute(d);
+        }
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("https://github.com/aurora-lzzp/Aurora-Studio-s-2048"));
+        }
+
+        private uint click_Count = 0;
+        private ThreadPoolTimer clickTimer;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private async void TextBlock_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            if (click_Count >= 5 && clickTimer != null)
+            {
+                clickTimer.Cancel();
+                clickTimer = null;
+                click_Count = 0;
+                var p = new MessageDialog("我是谁，我在哪，晚上吃啥？", "喵喵喵？");
+                await p.ShowAsync();
+                return;
+            }
+            click_Count++;
+            if (clickTimer == null)
+            {
+                clickTimer = ThreadPoolTimer.CreateTimer(x =>
+                {
+                    click_Count = 0;
+                }, TimeSpan.FromSeconds(5));
+            }
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            var b = sender as Button;
+            if (((string)b.Content) == "Light")
+            {
+                b.Content = "Dark";
+                s.IsDarkMode = true;
+                s.Save();
+                RequestedTheme = ElementTheme.Dark;
+                op.ChangeTheme(ElementTheme.Dark);
+                App.ChangeStatusBar(ElementTheme.Dark);
+            }
+            else if (((string)b.Content) == "Dark")
+            {
+                b.Content = "Light";
+                s.IsDarkMode = false;
+                s.Save();
+                RequestedTheme = ElementTheme.Light;
+                op.ChangeTheme(ElementTheme.Light);
+                App.ChangeStatusBar(ElementTheme.Light);
+            }
         }
     }
 }

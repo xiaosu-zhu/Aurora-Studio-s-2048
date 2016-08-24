@@ -1,0 +1,12 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Aurora.Studio._2048.Styles">
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#050710"/>
+    <SolidColorBrush x:Key="GridBGBrush" Color="#44525f"/>
+    <SolidColorBrush x:Key="GridBrush" Color="#A6111B25"/>
+    <SolidColorBrush x:Key="ForegroundBrush" Color="#88919A"/>
+    <SolidColorBrush x:Key="ButtonBrush" Color="#88919A"/>
+    <SolidColorBrush x:Key="ForegroundWhiteBrush" Color="#06090D"/>
+</ResourceDictionary>
