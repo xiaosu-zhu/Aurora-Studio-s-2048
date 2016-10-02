@@ -18,11 +18,13 @@ namespace Aurora.Studio._2048.Models
         public List<TileItem> Tiles = new List<TileItem>();
 
         public uint Score { get; set; } = 0;
+        public bool Endless { get; internal set; }
 
-        public Operator(uint[] data, uint score, ElementTheme theme)
+        public Operator(uint[] data, uint score, ElementTheme theme, bool ignoreEnd)
         {
             int i = 0;
             Score = score;
+            Endless = ignoreEnd;
             foreach (var item in data)
             {
                 if (item != 0u)
@@ -36,14 +38,14 @@ namespace Aurora.Studio._2048.Models
                 Tiles.Clear();
                 var a = Tools.Random.Next(4);
                 var b = Tools.Random.Next(4);
-                Tiles.Add(new TileItem(Tools.RandomBool(91) ? 2u : 4u, a, b, theme));
+                Tiles.Add(new TileItem(Tools.RandomBool(95) ? 2u : 4u, a, b, theme));
                 int c, d;
                 do
                 {
                     c = Tools.Random.Next(4);
                     d = Tools.Random.Next(4);
                 } while (c == a && d == b);
-                Tiles.Add(new TileItem(Tools.RandomBool(91) ? 2u : 4u, c, d, theme));
+                Tiles.Add(new TileItem(Tools.RandomBool(95) ? 2u : 4u, c, d, theme));
                 Score = 0;
             }
         }
@@ -129,7 +131,7 @@ namespace Aurora.Studio._2048.Models
                     Tiles.Remove(Tiles[i]);
                     continue;
                 }
-                if (Tiles[i].Data == 2048)
+                if (Tiles[i].Data == 2048 && !Endless)
                 {
                     OnGameEnd();
                 }
@@ -163,7 +165,7 @@ namespace Aurora.Studio._2048.Models
                     {
                         return x.Row * 4 + x.Col == p;
                     }));
-                    var til = new TileItem(Tools.RandomBool(91) ? 2u : 4u, p / 4, p % 4, theme);
+                    var til = new TileItem(Tools.RandomBool(95) ? 2u : 4u, p / 4, p % 4, theme);
                     Tiles.Add(til);
                     ground.Children.Add(til.Rect);
                     til.Pop.Begin();

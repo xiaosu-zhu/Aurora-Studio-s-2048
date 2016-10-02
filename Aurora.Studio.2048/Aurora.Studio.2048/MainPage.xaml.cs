@@ -51,7 +51,6 @@ namespace Aurora.Studio._2048
                 if (args.VirtualKey == Windows.System.VirtualKey.Enter)
                 {
                     Continue();
-
                 }
                 return;
             }
@@ -73,6 +72,7 @@ namespace Aurora.Studio._2048
             EndlessText.Opacity = 1;
             isGameEnd = false;
             isGamePaused = false;
+            op.Endless = true;
             StartAni.Begin();
             Save();
         }
@@ -89,7 +89,7 @@ namespace Aurora.Studio._2048
                 op.GameOverEvent -= Op_GameOverEvent;
                 op.ScoreAdd -= Op_ScoreAdd;
             }
-            op = new Operator(new uint[] { }, 0, RequestedTheme);
+            op = new Operator(new uint[] { }, 0, RequestedTheme, s.IgnoreGameEnd);
             op.GameEndEvent += Op_GameEndEvent;
             op.GameOverEvent += Op_GameOverEvent;
             op.ScoreAdd += Op_ScoreAdd;
@@ -126,7 +126,7 @@ namespace Aurora.Studio._2048
                 op.GameOverEvent -= Op_GameOverEvent;
                 op.ScoreAdd -= Op_ScoreAdd;
             }
-            op = new Operator(s.Data, s.Score, RequestedTheme);
+            op = new Operator(s.Data, s.Score, RequestedTheme, s.IgnoreGameEnd);
             op.GameEndEvent += Op_GameEndEvent;
             op.GameOverEvent += Op_GameOverEvent;
             op.ScoreAdd += Op_ScoreAdd;
